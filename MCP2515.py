@@ -456,7 +456,7 @@ class MCP2515():
     def Reset(self):
 		self.SPI.writebytes([CAN_RESET]) #Reset 0XC0
 		
-    def Init(self):
+    def Init(self, ID):
 		print("Reset")
 		self.Reset()
 		time.sleep(0.1)
@@ -468,15 +468,16 @@ class MCP2515():
 		# self.WriteByte(RXF0SIDL,0x00)
 		# Set baud rate to 125Kbps
 		# set CNF1, SJW=00, length of 1TQ, BRP=49, TQ=[2*(BRP+1)]/Fsoc=2*50/8M=12.5us
-		self.WriteByte(CNF1, CAN_125Kbps)
+		self.WriteByte(CNF1, CAN_500Kbps)
 		# set CNF2, SAM=0, sample the bus once at the sampling point, PHSEG1=(2+1)TQ=3TQ, PRSEG=(0+1)TQ=1TQ
 		self.WriteByte(CNF2,0x80|PHSEG1_3TQ|PRSEG_1TQ)
 		# set CNF3, PHSEG2=(2+1)TQ=3TQ, also set CLKOUT pin as time output enable bit when CANCTRL.CLKEN=1
 		self.WriteByte(CNF3,PHSEG2_3TQ)
 
 		# set TXB0, set the identifier and data to be sent for transmit buffer 0, and the length of the data to be sent
-		self.WriteByte(TXB0SIDH,0xFF)  # Set transmit buffer 0 standard identifier, to be modified***
-		self.WriteByte(TXB0SIDL,0xE0)  # Use standard identifier
+		self.WriteByte(TXB0SIDH,(0x140)>>3)  # Set transmit buffer 0 standard identifier, to be modified***
+		self.WriteByte(TXB0SIDL,(ID)<<5)  # Use standard identifier
+                #Os endereços começam a apartir do 0x140+ID
 		# set TXB1
 		self.WriteByte(TXB1SIDH,0x50)    # Set TXB0 SIDH
 		self.WriteByte(TXB1SIDL,0x00)    # Set TXB0 SIDL
