@@ -530,8 +530,11 @@ class MCP2515():
                     CAN_RX_Buf.append(hex(self.ReadByte(RXB0D0+i)))
                 break
 
+
         self.WriteByte(CANINTF, 0)
         self.WriteByte(CANINTE,0x01)  # Enable receive buffer 0 full interrupt
         self.WriteByte(RXB0SIDH,0x00)  # Clear receive buffer 0 standard identifier high bit
         self.WriteByte(RXB0SIDL,0x60)  # Clear receive buffer 0 standard identifier low bit
         return CAN_RX_Buf
+
+
