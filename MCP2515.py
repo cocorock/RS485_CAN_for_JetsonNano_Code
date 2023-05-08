@@ -476,7 +476,7 @@ class MCP2515():
 
 		# set TXB0, set the identifier and data to be sent for transmit buffer 0, and the length of the data to be sent
 		self.WriteByte(TXB0SIDH,(0x140)>>3)  # Set transmit buffer 0 standard identifier, to be modified***
-		self.WriteByte(TXB0SIDL,(ID)<<5)  # Use standard identifier
+		self.WriteByte(TXB0SIDL,(ID<<5) & 0xE0)  # Use standard identifier
                 #Os endereços começam a apartir do 0x140+ID
 		# set TXB1
 		self.WriteByte(TXB1SIDH,0x50)    # Set TXB0 SIDH
